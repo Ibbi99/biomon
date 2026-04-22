@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Patient Dashboard</title>
+  <link rel="stylesheet" href="/src/ui/styles/style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="header">
+      <h1>Patient: Virtual</h1>
+      <button id="theme-toggle" title="Toggle Theme">🌙</button>
+    </div>
+    <div class="dashboard-container">
+      <div class="card">
+        <h3>Heart Rate</h3>
+        <div class="value" id="val-hr">--</div>
+        <div class="unit">BPM</div>
+      </div>
+      <div class="card">
+        <h3>SpO2</h3>
+        <div class="value" id="val-spo2">--</div>
+        <div class="unit">%</div>
+      </div>
+      <div class="card">
+        <h3>Temperature</h3>
+        <div class="value" id="val-temp">--</div>
+        <div class="unit">°C</div>
+      </div>
+      <div class="card">
+        <h3>AI Verified HR</h3>
+        <div class="value" id="val-ai">--</div>
+        <div class="unit">BPM</div>
+      </div>
+      <div class="ecg-panel">
+        <div id="ecg-canvas"></div>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <div id="clinical-message">Virtual patient data running...</div>
+      <div id="last-update">Last update: --</div>
+    </div>
+  </div>
+  <script type="module" src="/src/app/VirtualPatient.ts"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+:root[data-theme="dark"] {
+  --bg-color: #121f2e;
+  --text-color: #ffffff;
+  --card-bg: #1d2a3b;
+  --card-border: #2d3a47;
+  --danger-bg: #3b1d1d;
+  --danger-border: #ff4444;
+}
+
+:root[data-theme="light"] {
+  --bg-color: #f5f5f5;
+  --text-color: #222222;
+  --card-bg: #ffffff;
+  --card-border: #ccc;
+  --danger-bg: #fff0f0;
+  --danger-border: #ff4444;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 12px;
+  flex: 1 1 150px;
+  min-width: 120px;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+/* Danger state — toggled by VitalCard.setDanger() */
+.card.danger {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+}
+
+.card h3 {
+  margin: 0 0 8px;
+}
+
+.value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.ecg-panel {
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* ECG canvas fills width, height set by PixiJS */
+.ecg-panel canvas {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+  background: #000;
+  border-radius: 8px;
+}
+
+.footer-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 1px solid var(--card-border);
+}
+
+/* Clinical message status colors */
+.clinical-message.stable  { color: #00cc66; }
+.clinical-message.warning { color: #ffaa00; }
+.clinical-message.critical { color: #ff4444; font-weight: bold; }
+
+.slider-container {
+  margin: 16px;
+}
+
+input[type="range"] {
+  width: 100%;
+}
