@@ -1,47 +1,139 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Virtual Patient Dashboard</title>
-  <link rel="stylesheet" href="/src/ui/styles/style.css">
-</head>
-<body>
-  <div id="app">
-    <div class="header">
-      <h1>Patient: Virtual</h1>
-      <button id="theme-toggle" title="Toggle Theme">🌙</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual Patient Dashboard</title>
+    <link rel="stylesheet" href="/src/ui/styles/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="header">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <button
+            onclick="window.location.href = 'index.html'"
+            style="
+              padding: 6px 16px;
+              cursor: pointer;
+              border-radius: 6px;
+              background: transparent;
+              color: #4a8a6a;
+              border: 1px solid #2a5a4a;
+              font-family: monospace;
+              font-size: 13px;
+            "
+          >
+            ← Home
+          </button>
+          <h1>Patient: Virtual</h1>
+        </div>
+        <button id="theme-toggle" title="Toggle Theme">🌙</button>
+      </div>
+
+      <div class="dashboard-container">
+        <div class="card">
+          <h3>Heart Rate</h3>
+          <div class="value" id="val-hr">--</div>
+          <div class="unit">BPM</div>
+        </div>
+        <div class="card">
+          <h3>SpO2</h3>
+          <div class="value" id="val-spo2">--</div>
+          <div class="unit">%</div>
+        </div>
+        <div class="card">
+          <h3>Temperature</h3>
+          <div class="value" id="val-temp">--</div>
+          <div class="unit">°C</div>
+        </div>
+        <div class="card">
+          <h3>Verified HR</h3>
+          <div class="value" id="val-ai">--</div>
+          <div class="unit">BPM</div>
+        </div>
+
+        <div class="ecg-panel">
+          <div id="ecg-canvas"></div>
+        </div>
+
+        <!-- History panel — same structure as patient_real.html -->
+        <div class="card history-panel" style="grid-column: 1 / -1">
+          <h3>Patient History</h3>
+
+          <div
+            class="history-controls"
+            style="
+              display: flex;
+              gap: 15px;
+              margin-bottom: 15px;
+              align-items: center;
+              flex-wrap: wrap;
+            "
+          >
+            <label style="font-family: monospace; font-size: 14px; color: #888">
+              Start:
+              <input
+                type="datetime-local"
+                id="hist-start"
+                style="
+                  padding: 6px;
+                  border-radius: 4px;
+                  border: 1px solid #2a5a4a;
+                  background: #081018;
+                  color: #fff;
+                  font-family: inherit;
+                  margin-left: 5px;
+                  color-scheme: dark;
+                "
+              />
+            </label>
+
+            <label style="font-family: monospace; font-size: 14px; color: #888">
+              End:
+              <input
+                type="datetime-local"
+                id="hist-end"
+                style="
+                  padding: 6px;
+                  border-radius: 4px;
+                  border: 1px solid #2a5a4a;
+                  background: #081018;
+                  color: #fff;
+                  font-family: inherit;
+                  margin-left: 5px;
+                  color-scheme: dark;
+                "
+              />
+            </label>
+
+            <button
+              id="btn-load-history"
+              style="
+                padding: 6px 20px;
+                cursor: pointer;
+                border-radius: 6px;
+                background: transparent;
+                color: #00ff66;
+                border: 1px solid #00cc55;
+                font-family: monospace;
+                font-size: 14px;
+                transition: all 0.2s;
+              "
+            >
+              Load Data
+            </button>
+          </div>
+
+          <div id="history-chart" style="width: 100%"></div>
+        </div>
+      </div>
+
+      <div class="footer-bar">
+        <div id="clinical-message">Virtual patient data running...</div>
+        <div id="last-update">Last update: --</div>
+      </div>
     </div>
-    <div class="dashboard-container">
-      <div class="card">
-        <h3>Heart Rate</h3>
-        <div class="value" id="val-hr">--</div>
-        <div class="unit">BPM</div>
-      </div>
-      <div class="card">
-        <h3>SpO2</h3>
-        <div class="value" id="val-spo2">--</div>
-        <div class="unit">%</div>
-      </div>
-      <div class="card">
-        <h3>Temperature</h3>
-        <div class="value" id="val-temp">--</div>
-        <div class="unit">°C</div>
-      </div>
-      <div class="card">
-        <h3>AI Verified HR</h3>
-        <div class="value" id="val-ai">--</div>
-        <div class="unit">BPM</div>
-      </div>
-      <div class="ecg-panel">
-        <div id="ecg-canvas"></div>
-      </div>
-    </div>
-    <div class="footer-bar">
-      <div id="clinical-message">Virtual patient data running...</div>
-      <div id="last-update">Last update: --</div>
-    </div>
-  </div>
-  <script type="module" src="/src/app/VirtualPatient.ts"></script>
-</body>
+
+    <script type="module" src="/src/app/VirtualPatient.ts"></script>
+  </body>
 </html>

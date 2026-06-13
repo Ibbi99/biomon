@@ -38,8 +38,12 @@ export class ECGCanvas {
   private readonly yMin = -3;
   private readonly yMax = 3;
 
-  private get drawH() { return this.canvasHeight - this.marginTop - this.marginBottom; }
-  private get drawW() { return this.canvasWidth - this.marginLeft - this.marginRight; }
+  private get drawH() {
+    return this.canvasHeight - this.marginTop - this.marginBottom;
+  }
+  private get drawW() {
+    return this.canvasWidth - this.marginLeft - this.marginRight;
+  }
 
   private signalBuffer: number[] = [];
   private peakBuffer: number[] = [];
@@ -108,7 +112,7 @@ export class ECGCanvas {
         fill: 0xff2222,
         fontFamily: "monospace",
         fontWeight: "bold",
-      }
+      },
     });
     this.flatlineText.anchor.set(0.5, 0.5);
     this.flatlineText.x = this.canvasWidth / 2;
@@ -118,7 +122,8 @@ export class ECGCanvas {
 
     // DOM
     this.container.innerHTML = "";
-    this.container.style.cssText = "display:flex; flex-direction:column; gap:4px; position:relative;";
+    this.container.style.cssText =
+      "display:flex; flex-direction:column; gap:4px; position:relative;";
 
     const canvasWrapper = document.createElement("div");
     canvasWrapper.style.cssText = "position:relative;";
@@ -135,11 +140,13 @@ export class ECGCanvas {
     this.container.appendChild(canvasWrapper);
 
     const controlRow = document.createElement("div");
-    controlRow.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:0 4px;";
+    controlRow.style.cssText =
+      "display:flex; justify-content:space-between; align-items:center; padding:0 4px;";
 
     const xTitle = document.createElement("span");
     xTitle.textContent = "time (s)";
-    xTitle.style.cssText = "font-size:10px; color:#2a5a4a; font-family:monospace;";
+    xTitle.style.cssText =
+      "font-size:10px; color:#2a5a4a; font-family:monospace;";
     controlRow.appendChild(xTitle);
 
     this.pauseBtn = document.createElement("button");
@@ -163,7 +170,11 @@ export class ECGCanvas {
     this.startLoop();
 
     if (this.pendingSignal.length > 0) {
-      this.renderSignal(this.pendingSignal, this.pendingPeaks, this.pendingFlat);
+      this.renderSignal(
+        this.pendingSignal,
+        this.pendingPeaks,
+        this.pendingFlat,
+      );
       this.pendingSignal = [];
       this.pendingPeaks = [];
     }
@@ -178,14 +189,14 @@ export class ECGCanvas {
     const yBot = this.canvasHeight - this.marginBottom;
 
     // Y labels: +2, +1, 0, -1, -2
-    [3, 2, 1, 0, -1, -2, -3].forEach(val => {
+    [3, 2, 1, 0, -1, -2, -3].forEach((val) => {
       const text = new PIXI.Text({
-        text: val === 0 ? "0" : (val > 0 ? `+${val}` : `${val}`),
+        text: val === 0 ? "0" : val > 0 ? `+${val}` : `${val}`,
         style: {
           fontSize: 10,
           fill: val === 0 ? 0x4aaa80 : 0x4a7a68,
           fontFamily: "monospace",
-        }
+        },
       });
       text.anchor.set(1, 0.5);
       text.x = x0 - 6;
@@ -196,7 +207,7 @@ export class ECGCanvas {
     // mV label
     const mvLabel = new PIXI.Text({
       text: "mV",
-      style: { fontSize: 9, fill: 0x2a5a4a, fontFamily: "monospace" }
+      style: { fontSize: 9, fill: 0x2a5a4a, fontFamily: "monospace" },
     });
     mvLabel.x = 2;
     mvLabel.y = 2;
@@ -210,7 +221,7 @@ export class ECGCanvas {
       const sec = ((i / xSteps) * totalSec).toFixed(1);
       const xLabel = new PIXI.Text({
         text: `${sec}s`,
-        style: { fontSize: 10, fill: 0x4a7a68, fontFamily: "monospace" }
+        style: { fontSize: 10, fill: 0x4a7a68, fontFamily: "monospace" },
       });
       xLabel.anchor.set(0.5, 0);
       xLabel.x = x;
@@ -266,7 +277,10 @@ export class ECGCanvas {
   }
 
   private startLoop(): void {
-    const loop = () => { this.draw(); requestAnimationFrame(loop); };
+    const loop = () => {
+      this.draw();
+      requestAnimationFrame(loop);
+    };
     requestAnimationFrame(loop);
   }
 
@@ -276,7 +290,11 @@ export class ECGCanvas {
    * @param peaks     - R-peak indices
    * @param flat      - true = cardiac arrest → show flatline
    */
-  public renderSignal(newSignal: number[], peaks: number[] = [], flat = false): void {
+  public renderSignal(
+    newSignal: number[],
+    peaks: number[] = [],
+    flat = false,
+  ): void {
     if (!Array.isArray(newSignal) || newSignal.length === 0) return;
 
     if (!this.initialized) {
@@ -302,7 +320,9 @@ export class ECGCanvas {
     if (this.signalBuffer.length > this.maxPoints) {
       const drop = this.signalBuffer.length - this.maxPoints;
       this.signalBuffer = this.signalBuffer.slice(-this.maxPoints);
-      this.peakBuffer = this.peakBuffer.map(p => p - drop).filter(p => p >= 0);
+      this.peakBuffer = this.peakBuffer
+        .map((p) => p - drop)
+        .filter((p) => p >= 0);
     }
   }
 
@@ -313,7 +333,7 @@ export class ECGCanvas {
     const yBot = this.canvasHeight - this.marginBottom;
 
     // Horizontal lines at -2, -1, 0, +1, +2
-    [2, 1, 0, -1, -2].forEach(val => {
+    [2, 1, 0, -1, -2].forEach((val) => {
       const y = this.ampToY(val);
       this.graphics.moveTo(x0, y).lineTo(x1, y);
     });
@@ -358,7 +378,8 @@ export class ECGCanvas {
     if (flat) {
       // Cardiac arrest — red flatline at y=0
       const yZero = this.ampToY(0);
-      this.graphics.moveTo(offsetX, yZero)
+      this.graphics
+        .moveTo(offsetX, yZero)
         .lineTo(offsetX + (visible.length - 1) * xStep, yZero);
       this.graphics.stroke({ width: 2, color: 0xff2222, alpha: 1 });
       return;
@@ -374,7 +395,7 @@ export class ECGCanvas {
     // R-peak markers — yellow dots at QRS peaks
     const sigMax = Math.max(...visible);
     const sigMin = Math.min(...visible);
-    const threshold = sigMin + (sigMax - sigMin) * 0.70;
+    const threshold = sigMin + (sigMax - sigMin) * 0.7;
     const searchWindow = 20;
 
     for (const peakIdx of peaks) {
@@ -382,9 +403,13 @@ export class ECGCanvas {
       if (visIdx < 0 || visIdx >= visible.length) continue;
       const lo = Math.max(0, visIdx - searchWindow);
       const hi = Math.min(visible.length - 1, visIdx + searchWindow);
-      let bestIdx = visIdx, bestVal = visible[visIdx];
+      let bestIdx = visIdx,
+        bestVal = visible[visIdx];
       for (let j = lo; j <= hi; j++) {
-        if (visible[j] > bestVal) { bestVal = visible[j]; bestIdx = j; }
+        if (visible[j] > bestVal) {
+          bestVal = visible[j];
+          bestIdx = j;
+        }
       }
       if (bestVal < threshold) continue;
       const px = offsetX + bestIdx * xStep;

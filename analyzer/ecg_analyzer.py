@@ -83,7 +83,9 @@ class ECGAnalyzer:
             sampling_rate=sampling_rate,
         )
 
-        quality = "good" if confidence >= 0.75 else "fair" if confidence >= 0.45 else "poor"
+        quality = (
+            "good" if confidence >= 0.75 else "fair" if confidence >= 0.45 else "poor"
+        )
 
         return ECGAnalysisResult(
             filtered_signal=signal,
@@ -106,7 +108,7 @@ class ECGAnalyzer:
             return []
         mean_val = sum(signal) / len(signal)
         variance = sum((x - mean_val) ** 2 for x in signal) / len(signal)
-        std_val = max(variance ** 0.5, 1e-6)
+        std_val = max(variance**0.5, 1e-6)
         return [(x - mean_val) / std_val for x in signal]
 
     def _enhance_qrs(self, signal: List[float], sampling_rate: float) -> List[float]:
@@ -133,7 +135,7 @@ class ECGAnalyzer:
         integrated = []
         for i in range(len(squared)):
             start = max(0, i - window + 1)
-            chunk = squared[start:i + 1]
+            chunk = squared[start : i + 1]
             integrated.append(sum(chunk) / len(chunk))
 
         return integrated
@@ -155,7 +157,7 @@ class ECGAnalyzer:
 
         mean_val = sum(signal) / len(signal)
         variance = sum((x - mean_val) ** 2 for x in signal) / len(signal)
-        std_val = variance ** 0.5
+        std_val = variance**0.5
 
         threshold = mean_val + 0.8 * std_val
         refractory_samples = int(ECG_REFRACTORY_PERIOD_SEC * sampling_rate)
@@ -165,9 +167,9 @@ class ECGAnalyzer:
 
         for i in range(1, len(signal) - 1):
             is_peak = (
-                signal[i] > threshold and
-                signal[i] > signal[i - 1] and
-                signal[i] >= signal[i + 1]
+                signal[i] > threshold
+                and signal[i] > signal[i - 1]
+                and signal[i] >= signal[i + 1]
             )
             if not is_peak:
                 continue
@@ -182,7 +184,9 @@ class ECGAnalyzer:
 
         return peaks
 
-    def _calculate_hr_from_peaks(self, peaks: List[int], sampling_rate: float) -> float | None:
+    def _calculate_hr_from_peaks(
+        self, peaks: List[int], sampling_rate: float
+    ) -> float | None:
         """
         Calculates heart rate from the average RR interval between detected peaks.
         Only intervals within the physiologically valid range are used
@@ -250,9 +254,9 @@ class ECGAnalyzer:
         hr_score = 1.0 if 40 <= hr <= 180 else 0.4
 
         confidence = (
-            0.4 * consistency +
-            0.25 * duration_score +
-            0.2 * missing_score +
-            0.15 * hr_score
+            0.4 * consistency
+            + 0.25 * duration_score
+            + 0.2 * missing_score
+            + 0.15 * hr_score
         )
         return max(0.0, min(1.0, confidence))

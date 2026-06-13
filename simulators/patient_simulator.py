@@ -26,7 +26,7 @@ from firebase_client import FirebaseClient
 from simulators.scenarios import ScenarioFactory
 from firebase_admin import db
 
-ECG_BATCH_SIZE = 400     # Samples per batch (matches ESP32 firmware)
+ECG_BATCH_SIZE = 400  # Samples per batch (matches ESP32 firmware)
 ECG_SAMPLING_RATE = 200  # Hz (matches ESP32 firmware)
 
 
@@ -46,9 +46,7 @@ def build_vitals_payload(data: dict) -> dict:
 
 
 def generate_ecg_batch(
-    hr: float,
-    points: int = ECG_BATCH_SIZE,
-    sampling_rate: float = ECG_SAMPLING_RATE
+    hr: float, points: int = ECG_BATCH_SIZE, sampling_rate: float = ECG_SAMPLING_RATE
 ) -> list[float]:
     """
     Generates a synthetic ECG signal with realistic P-QRS-T morphology.
@@ -81,11 +79,15 @@ def generate_ecg_batch(
         phase = (i % samples_per_beat) / samples_per_beat  # 0.0 to 1.0 within one beat
 
         # P wave — atrial depolarization
-        p_wave = 0.25 * math.exp(-((phase - 0.15) ** 2) / (2 * 0.007**2)) if 0.05 < phase < 0.25 else 0.0
+        p_wave = (
+            0.25 * math.exp(-((phase - 0.15) ** 2) / (2 * 0.007**2))
+            if 0.05 < phase < 0.25
+            else 0.0
+        )
 
         # QRS complex — ventricular depolarization
         q_wave = -0.15 * math.exp(-((phase - 0.28) ** 2) / (2 * 0.003**2))
-        r_wave =  1.50 * math.exp(-((phase - 0.31) ** 2) / (2 * 0.003**2))
+        r_wave = 1.50 * math.exp(-((phase - 0.31) ** 2) / (2 * 0.003**2))
         s_wave = -0.25 * math.exp(-((phase - 0.34) ** 2) / (2 * 0.003**2))
         qrs = q_wave + r_wave + s_wave
 
@@ -113,10 +115,7 @@ def build_ecg_payload(hr: float) -> dict:
 
 def push_live_data(patient_id: str, vitals: dict, ecg: dict) -> None:
     """Writes vitals and ECG to /patients/{id}/live in a single Firebase set() call."""
-    db.reference(f"/patients/{patient_id}/live").set({
-        "vitals": vitals,
-        "ecg": ecg
-    })
+    db.reference(f"/patients/{patient_id}/live").set({"vitals": vitals, "ecg": ecg})
 
 
 def push_history_vitals(patient_id: str, payload: dict) -> None:
@@ -136,7 +135,7 @@ def main():
     ]
 
     patient_id = "Patient_01"
-    index = 0    # Current scenario index
+    index = 0  # Current scenario index
     counter = 0  # Seconds elapsed in current scenario
 
     print("=== PATIENT SIMULATOR STARTED ===")

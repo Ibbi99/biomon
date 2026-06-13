@@ -65,7 +65,9 @@ class AlertService:
         if spo2 is not None and spo2 < ALERT_SPO2_CRITICAL:
             status = "CRITICAL"
             message = "Critical oxygen saturation"
-        elif heart_rate_to_use is not None and (heart_rate_to_use < 35 or heart_rate_to_use > 160):
+        elif heart_rate_to_use is not None and (
+            heart_rate_to_use < 35 or heart_rate_to_use > 160
+        ):
             status = "CRITICAL"
             message = "Critical heart rate"
         elif temp is not None and temp >= ALERT_TEMP_CRITICAL:

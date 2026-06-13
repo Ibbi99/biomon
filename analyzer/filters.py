@@ -35,7 +35,7 @@ class MovingAverageFilter:
         result = []
         for i in range(len(signal)):
             start = max(0, i - window + 1)
-            chunk = signal[start:i + 1]
+            chunk = signal[start : i + 1]
             result.append(sum(chunk) / len(chunk))
         return result
 
@@ -96,7 +96,7 @@ class BaselineRemovalFilter:
         result = []
         for i in range(len(signal)):
             start = max(0, i - window + 1)
-            chunk = signal[start:i + 1]
+            chunk = signal[start : i + 1]
             baseline = sum(chunk) / len(chunk)
             result.append(signal[i] - baseline)
         return result

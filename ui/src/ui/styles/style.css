@@ -44,7 +44,9 @@ body {
   padding: 12px;
   flex: 1 1 150px;
   min-width: 120px;
-  transition: background 0.3s, border-color 0.3s;
+  transition:
+    background 0.3s,
+    border-color 0.3s;
 }
 
 /* Danger state — toggled by VitalCard.setDanger() */
@@ -84,9 +86,16 @@ body {
 }
 
 /* Clinical message status colors */
-.clinical-message.stable  { color: #00cc66; }
-.clinical-message.warning { color: #ffaa00; }
-.clinical-message.critical { color: #ff4444; font-weight: bold; }
+.clinical-message.stable {
+  color: #00cc66;
+}
+.clinical-message.warning {
+  color: #ffaa00;
+}
+.clinical-message.critical {
+  color: #ff4444;
+  font-weight: bold;
+}
 
 .slider-container {
   margin: 16px;

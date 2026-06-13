@@ -39,25 +39,28 @@ export class DashboardController {
     this.statusBanner.update(
       payload.status ?? "STABLE",
       payload.message ?? "No message",
-      payload.timestamp ?? 0
+      payload.timestamp ?? 0,
     );
 
-    const hasEcg = Array.isArray(payload.ecg_filtered) && payload.ecg_filtered.length > 0;
+    const hasEcg =
+      Array.isArray(payload.ecg_filtered) && payload.ecg_filtered.length > 0;
 
     // Cardiac arrest real: HR null, VerifiedHR null, SI SpO2 critic (<50)
     // HR=null fara SpO2 critic = senzor vitals deconectat, nu cardiac arrest
-    const isFlat = hr === null && verifiedHr === null && (spo2 === null || spo2 < 50);
+    const isFlat =
+      hr === null && verifiedHr === null && (spo2 === null || spo2 < 50);
 
     if (isFlat) {
-      const flatSignal = hasEcg ? payload.ecg_filtered! : new Array(200).fill(0);
+      const flatSignal = hasEcg
+        ? payload.ecg_filtered!
+        : new Array(200).fill(0);
       this.ecgCanvas.renderSignal(flatSignal, [], true);
     } else if (hasEcg) {
-      this.ecgCanvas.renderSignal(payload.ecg_filtered!, payload.ecg_peaks ?? [], false);
-    } else {
-      this.ecgCanvas.renderSignal(new Array(200).fill(0), [], false);
+      this.ecgCanvas.renderSignal(
+        payload.ecg_filtered!,
+        payload.ecg_peaks ?? [],
+        false,
+      );
     }
   }
 }
-
-
-

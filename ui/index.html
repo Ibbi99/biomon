@@ -1,28 +1,28 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Medical Dashboard - Overview</title>
-  <link rel="stylesheet" href="/src/ui/styles/style.css" />
-</head>
-<body>
-  <div id="app">
-    <div class="header">
-      <h1>Patient Overview</h1>
-      <button id="theme-toggle" title="Toggle Theme">🌙</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medical Dashboard - Overview</title>
+    <link rel="stylesheet" href="/src/ui/styles/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="header">
+        <h1>Patient Overview</h1>
+        <button id="theme-toggle" title="Toggle Theme">🌙</button>
+      </div>
+
+      <div class="dashboard-container" id="patients-container">
+        <!-- Patient cards are injected here by App.ts -->
+      </div>
+
+      <div class="footer-bar">
+        <div id="clinical-message">Select a patient to view details.</div>
+        <div id="last-update">Last update: --</div>
+      </div>
     </div>
 
-    <div class="dashboard-container" id="patients-container">
-      <!-- Patient cards are injected here by App.ts -->
-    </div>
-
-    <div class="footer-bar">
-      <div id="clinical-message">Select a patient to view details.</div>
-      <div id="last-update">Last update: --</div>
-    </div>
-  </div>
-
-  <script type="module" src="/src/app/App.ts"></script>
-</body>
+    <script type="module" src="/src/app/App.ts"></script>
+  </body>
 </html>

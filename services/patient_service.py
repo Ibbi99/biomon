@@ -1,16 +1,4 @@
 # services/patient_service.py
-#
-# Orchestrates the full processing pipeline for a single patient per poll cycle.
-# Called by app.py for every patient found in Firebase.
-#
-# Processing order:
-#   1. Sanitize raw wrist data    -> WristAnalyzer.sanitize()
-#   2. Validate and clean ECG     -> _clean_ecg_batch() + _is_viable_ecg_batch()
-#   3. Analyze ECG signal         -> ECGAnalyzer.analyze()
-#   4. Save filtered ECG          -> firebase_client.save_ecg_result()
-#   5. Evaluate alert status      -> AlertService.evaluate()
-#   6. Build dashboard payload    -> DashboardService.build_payload()
-#   7. Save dashboard to Firebase -> firebase_client.save_dashboard_data()
 
 import math
 
@@ -29,13 +17,7 @@ class PatientService:
         self.alert_service = AlertService()
         self.dashboard_service = DashboardService()
 
-    def process_patient(
-        self,
-        patient_id: str,
-        raw_wrist: dict | None,
-        raw_chest: dict | None,
-        firebase_client=None,
-    ) -> dict:
+    def process_patient(self, patient_id, raw_wrist, raw_chest, firebase_client=None):
         state = PatientState(patient_id=patient_id)
 
         wrist = None
@@ -53,9 +35,17 @@ class PatientService:
                     ecg_batch=cleaned_batch,
                     timestamp=self._to_int(raw_chest.get("timestamp", 0)),
                     patient_id=patient_id,
-                    source_type="simulated" if patient_id in SIMULATED_PATIENT_IDS else "firebase_real",
-                    sampling_rate=self._to_float(raw_chest.get("sampling_rate")) or DEFAULT_ECG_SAMPLING_RATE,
-                    expected_batch_size=self._to_int(raw_chest.get("expected_batch_size")) or len(raw_batch),
+                    source_type=(
+                        "simulated"
+                        if patient_id in SIMULATED_PATIENT_IDS
+                        else "firebase_real"
+                    ),
+                    sampling_rate=self._to_float(raw_chest.get("sampling_rate"))
+                    or DEFAULT_ECG_SAMPLING_RATE,
+                    expected_batch_size=self._to_int(
+                        raw_chest.get("expected_batch_size")
+                    )
+                    or len(raw_batch),
                     missing_samples=missing_samples,
                 )
 
@@ -75,40 +65,57 @@ class PatientService:
                         "missing_samples": ecg_result.missing_samples,
                     }
                     firebase_client.save_ecg_result(patient_id, filtered_payload)
+                    firebase_client.save_ecg_history_entry(patient_id, ecg_result)
             else:
                 ecg_result = None
 
         status = self.alert_service.evaluate(wrist, ecg_result)
         state.last_status = status
 
-        dashboard_payload = self.dashboard_service.build_payload(status, ecg_result)
+        # FIX: pass wrist so dashboard_service can use wrist HR when ECG absent
+        dashboard_payload = self.dashboard_service.build_payload(
+            status, ecg_result, wrist
+        )
 
         if firebase_client is not None:
             firebase_client.save_dashboard_data(patient_id, dashboard_payload)
+            # NEW: save vitals history entry with server-side Unix timestamp
+            # so fetchHistory(orderByChild("timestamp")) works correctly in frontend
+            firebase_client.save_vitals_history_entry(
+                patient_id, wrist, dashboard_payload.get("verified_hr")
+            )
 
         return {
             "state": state,
             "dashboard_payload": dashboard_payload,
-            "processed_wrist": {
-                "heart_rate": wrist.heart_rate if wrist else None,
-                "spo2": wrist.spo2 if wrist else None,
-                "temp": wrist.temperature if wrist else None,
-                "timestamp": wrist.timestamp if wrist else 0,
-            } if wrist else None,
-            "processed_ecg": {
-                "filtered_signal": ecg_result.filtered_signal if ecg_result else [],
-                "peaks": ecg_result.peaks if ecg_result else [],
-                "verified_hr": ecg_result.verified_hr if ecg_result else None,
-                "confidence": ecg_result.confidence if ecg_result else 0.0,
-                "timestamp": ecg_result.timestamp if ecg_result else 0,
-                "quality": ecg_result.quality if ecg_result else "invalid",
-                "source_type": ecg_result.source_type if ecg_result else "unknown",
-                "sampling_rate": ecg_result.sampling_rate if ecg_result else None,
-                "missing_samples": ecg_result.missing_samples if ecg_result else 0,
-            } if ecg_result else None,
+            "processed_wrist": (
+                {
+                    "heart_rate": wrist.heart_rate if wrist else None,
+                    "spo2": wrist.spo2 if wrist else None,
+                    "temp": wrist.temperature if wrist else None,
+                    "timestamp": wrist.timestamp if wrist else 0,
+                }
+                if wrist
+                else None
+            ),
+            "processed_ecg": (
+                {
+                    "filtered_signal": ecg_result.filtered_signal if ecg_result else [],
+                    "peaks": ecg_result.peaks if ecg_result else [],
+                    "verified_hr": ecg_result.verified_hr if ecg_result else None,
+                    "confidence": ecg_result.confidence if ecg_result else 0.0,
+                    "timestamp": ecg_result.timestamp if ecg_result else 0,
+                    "quality": ecg_result.quality if ecg_result else "invalid",
+                    "source_type": ecg_result.source_type if ecg_result else "unknown",
+                    "sampling_rate": ecg_result.sampling_rate if ecg_result else None,
+                    "missing_samples": ecg_result.missing_samples if ecg_result else 0,
+                }
+                if ecg_result
+                else None
+            ),
         }
 
-    def _clean_ecg_batch(self, raw_values) -> tuple[list[float], int]:
+    def _clean_ecg_batch(self, raw_values):
         cleaned = []
         missing = 0
         for value in raw_values:
@@ -122,24 +129,15 @@ class PatientService:
                 missing += 1
         return cleaned, missing
 
-    def _is_viable_ecg_batch(self, signal: list[float]) -> bool:
-        """
-        Accepts any batch with at least 20 samples and minimal signal presence.
-        Threshold of 0.005 accepts both normal ECG (range ~1.5-2.0) and
-        flatline signals from cardiac arrest (range ~0.02).
-        Rejects truly empty or corrupt batches.
-        """
+    def _is_viable_ecg_batch(self, signal):
         if len(signal) < 20:
             return False
-        dynamic_range = max(signal) - min(signal)
-        return dynamic_range >= 0.005
+        return (max(signal) - min(signal)) >= 0.5
 
     @staticmethod
     def _to_float(value):
         try:
-            if value is None:
-                return None
-            return float(value)
+            return float(value) if value is not None else None
         except (TypeError, ValueError):
             return None
 

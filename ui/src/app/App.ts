@@ -31,20 +31,25 @@ const patients = [
     id: "real",
     name: "Patient Real",
     path: "/patients/Patient_02/dashboard/current",
-    link: "patient_real.html"
+    link: "patient_real.html",
   },
   {
     id: "virtual",
     name: "Patient Virtual",
     path: "/patients/Patient_01/dashboard/current",
-    link: "patient_virtual.html"
-  }
+    link: "patient_virtual.html",
+  },
 ];
 
 // Create and render a PatientCard for each patient
 const cards: Record<string, PatientCard> = {};
-patients.forEach(p => {
-  const card = new PatientCard({ id: p.id, name: p.name, status: "STABLE", link: p.link });
+patients.forEach((p) => {
+  const card = new PatientCard({
+    id: p.id,
+    name: p.name,
+    status: "STABLE",
+    link: p.link,
+  });
   card.render(container);
   cards[p.id] = card;
 });
@@ -52,7 +57,7 @@ patients.forEach(p => {
 // Subscribe to Firebase for each patient and update their card on every change
 const firebaseService = new FirebaseService();
 
-patients.forEach(p => {
+patients.forEach((p) => {
   firebaseService.subscribe<DashboardPayload>(p.path, (payload) => {
     if (!payload) return;
 
@@ -63,7 +68,7 @@ patients.forEach(p => {
     card.updateVitals(
       payload.heart_rate ?? undefined,
       payload.spo2 ?? undefined,
-      payload.temp ?? undefined
+      payload.temp ?? undefined,
     );
 
     // Update the last-update timestamp whenever any patient sends new data

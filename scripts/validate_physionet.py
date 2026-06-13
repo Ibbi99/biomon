@@ -31,10 +31,10 @@ from analyzer.ecg_analyzer import ECGAnalyzer
 from models import ChestData
 
 # ── Configuration ─────────────────────────────────────────────
-RECORD_NAME   = "105"        # MIT-BIH record to test
-SAMPLING_RATE = 360          # MIT-BIH is 360 Hz
-BATCH_SIZE    = 1800         # 5 seconds of data (5 * 360)
-TOLERANCE_MS  = 150          # ±150ms tolerance for peak matching
+RECORD_NAME = "105"  # MIT-BIH record to test
+SAMPLING_RATE = 360  # MIT-BIH is 360 Hz
+BATCH_SIZE = 1800  # 5 seconds of data (5 * 360)
+TOLERANCE_MS = 150  # ±150ms tolerance for peak matching
 TOLERANCE_SAMPLES = int(TOLERANCE_MS / 1000 * SAMPLING_RATE)
 
 # ── Download and load record ───────────────────────────────────
@@ -53,10 +53,30 @@ signal = record.p_signal[:, 0].tolist()
 fs = record.fs
 
 # Get reference R-peak annotations (beat annotations only)
-beat_types = {"N", "L", "R", "B", "A", "a", "J", "S", "V", "r",
-              "F", "e", "j", "n", "E", "/", "f", "Q", "?"}
-ref_peaks = [s for s, sym in zip(annotation.sample, annotation.symbol)
-             if sym in beat_types]
+beat_types = {
+    "N",
+    "L",
+    "R",
+    "B",
+    "A",
+    "a",
+    "J",
+    "S",
+    "V",
+    "r",
+    "F",
+    "e",
+    "j",
+    "n",
+    "E",
+    "/",
+    "f",
+    "Q",
+    "?",
+}
+ref_peaks = [
+    s for s, sym in zip(annotation.sample, annotation.symbol) if sym in beat_types
+]
 
 print(f"Reference peaks (clinical annotations): {len(ref_peaks)}")
 
@@ -66,11 +86,13 @@ all_detected_peaks = []
 results = []
 
 num_batches = len(signal) // BATCH_SIZE
-print(f"\nAnalyzing {num_batches} batches of {BATCH_SIZE} samples ({BATCH_SIZE/fs:.1f}s each)...\n")
+print(
+    f"\nAnalyzing {num_batches} batches of {BATCH_SIZE} samples ({BATCH_SIZE/fs:.1f}s each)...\n"
+)
 
 for i in range(num_batches):
     start = i * BATCH_SIZE
-    end   = start + BATCH_SIZE
+    end = start + BATCH_SIZE
     batch = signal[start:end]
 
     chest = ChestData(
@@ -89,20 +111,24 @@ for i in range(num_batches):
     global_peaks = [p + start for p in result.peaks]
     all_detected_peaks.extend(global_peaks)
 
-    results.append({
-        "batch": i + 1,
-        "verified_hr": result.verified_hr,
-        "confidence": result.confidence,
-        "quality": result.quality,
-        "peaks_found": len(result.peaks),
-    })
+    results.append(
+        {
+            "batch": i + 1,
+            "verified_hr": result.verified_hr,
+            "confidence": result.confidence,
+            "quality": result.quality,
+            "peaks_found": len(result.peaks),
+        }
+    )
 
-    print(f"Batch {i+1:2d}/{num_batches} | "
-          f"HR={result.verified_hr:.1f} BPM | " if result.verified_hr else
-          f"Batch {i+1:2d}/{num_batches} | HR=None | "
-          f"Confidence={result.confidence:.2f} | "
-          f"Quality={result.quality} | "
-          f"Peaks={len(result.peaks)}")
+    print(
+        f"Batch {i+1:2d}/{num_batches} | " f"HR={result.verified_hr:.1f} BPM | "
+        if result.verified_hr
+        else f"Batch {i+1:2d}/{num_batches} | HR=None | "
+        f"Confidence={result.confidence:.2f} | "
+        f"Quality={result.quality} | "
+        f"Peaks={len(result.peaks)}"
+    )
 
 # ── Compare detected peaks with reference ──────────────────────
 print(f"\n=== Peak Detection Accuracy ===\n")
@@ -132,8 +158,12 @@ for det_peak in all_detected_peaks:
 FN = len(ref_in_range) - len(matched_ref)
 
 sensitivity = TP / (TP + FN) if (TP + FN) > 0 else 0
-precision   = TP / (TP + FP) if (TP + FP) > 0 else 0
-f1          = 2 * sensitivity * precision / (sensitivity + precision) if (sensitivity + precision) > 0 else 0
+precision = TP / (TP + FP) if (TP + FP) > 0 else 0
+f1 = (
+    2 * sensitivity * precision / (sensitivity + precision)
+    if (sensitivity + precision) > 0
+    else 0
+)
 
 print(f"Reference peaks in range : {len(ref_in_range)}")
 print(f"Detected peaks           : {len(all_detected_peaks)}")
