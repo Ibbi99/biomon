@@ -21,6 +21,7 @@ import {
   orderByChild,
   startAt,
   endAt,
+  set,
 } from "firebase/database";
 
 export class FirebaseService {
@@ -99,5 +100,16 @@ export class FirebaseService {
       console.error("Error fetching history:", error);
       return [];
     }
+  }
+
+  public async getValue<T>(path: string): Promise<T | null> {
+    const dbRef = ref(this.database, path);
+    const snapshot = await get(dbRef);
+    return snapshot.exists() ? (snapshot.val() as T) : null;
+  }
+
+  public async setValue<T>(path: string, value: T): Promise<void> {
+    const dbRef = ref(this.database, path);
+    await set(dbRef, value);
   }
 }

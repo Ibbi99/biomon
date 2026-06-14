@@ -10,6 +10,7 @@ interface VitalsEntry {
   spo2?: number;
   temperature?: number;
   temp?: number;
+  patient_name?: string;
 }
 
 interface EcgEntry {
@@ -18,6 +19,7 @@ interface EcgEntry {
   confidence: number | null;
   quality: string | null;
   missing_samples: number | null;
+  patient_name?: string;
 }
 
 interface TimelineEvent {
@@ -34,6 +36,7 @@ interface TimelineEvent {
   status: "STABLE" | "WARNING" | "CRITICAL";
   message: string;
   isHourly: boolean;
+  patient_name?: string;
 }
 
 const T = {
@@ -190,7 +193,7 @@ export class HistoryChart {
     const events: TimelineEvent[] = [];
     let lastStatus: "STABLE" | "WARNING" | "CRITICAL" | null = null;
     let lastHourlyTs = -Infinity;
-    const ONE_HOUR = 5 * 60 * 1000;
+    const ONE_HOUR = 1 * 60 * 1000;
 
     for (const v of sorted) {
       const hr = v.bpm ?? v.heartRate ?? null;
@@ -253,6 +256,7 @@ export class HistoryChart {
         status,
         message,
         isHourly,
+        patient_name: v.patient_name,
       });
 
       if (status === "STABLE") lastHourlyTs = v.timestamp;
@@ -414,6 +418,7 @@ export class HistoryChart {
           ${qualityBadge}
         </div>
         <div style="font-size:12px; color:var(--text-color); opacity:0.7;">${ev.datetime}</div>
+        ${ev.patient_name ? `<div style="font-size:12px; color:var(--text-color); opacity:0.7; margin-top:2px;">Patient: ${ev.patient_name}</div>` : ""}
         ${
           ev.message !== "Patient stable"
             ? `<div style="color:${sc}; font-size:12px; margin-top:6px;">⚠ ${ev.message}</div>`

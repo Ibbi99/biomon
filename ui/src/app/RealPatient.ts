@@ -29,11 +29,7 @@ firebaseService.subscribe<DashboardPayload>(
 
     const lastUpdate = document.getElementById("last-update");
     if (lastUpdate) {
-      lastUpdate.textContent = `Last update: ${
-        payload.timestamp
-          ? new Date(payload.timestamp).toLocaleTimeString()
-          : "--"
-      }`;
+      lastUpdate.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
     }
   },
 );
@@ -83,3 +79,31 @@ btnLoad.addEventListener("click", async () => {
   btnLoad.style.opacity = "1";
   btnLoad.disabled = false;
 });
+
+// ── Patient name editing ────────────────────────────────────
+const PATIENT_PATH = "/patients/Patient_02";
+const nameDisplay = document.getElementById(
+  "patient-name-display",
+) as HTMLHeadingElement;
+const editBtn = document.getElementById("edit-name-btn") as HTMLButtonElement;
+
+async function loadPatientName(): Promise<void> {
+  const name = await firebaseService.getValue<string>(
+    `${PATIENT_PATH}/profile/name`,
+  );
+  nameDisplay.textContent = `Patient: ${name ?? "Real"}`;
+}
+
+editBtn.addEventListener("click", async () => {
+  const current = nameDisplay.textContent?.replace("Patient: ", "") ?? "";
+  const newName = prompt("Enter patient name:", current);
+  if (newName === null || newName.trim() === "") return;
+
+  await firebaseService.setValue(
+    `${PATIENT_PATH}/profile/name`,
+    newName.trim(),
+  );
+  nameDisplay.textContent = `Patient: ${newName.trim()}`;
+});
+
+loadPatientName();

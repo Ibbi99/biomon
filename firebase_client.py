@@ -57,6 +57,12 @@ class FirebaseClient:
             return None
         return ecg
 
+    def get_patient_name(self, patient_id: str) -> str:
+        """Reads the current patient name from /patients/{id}/profile/name.
+        Returns the patient_id itself if no name has been set yet."""
+        name = db.reference(f"/patients/{patient_id}/profile/name").get()
+        return name if isinstance(name, str) and name.strip() else patient_id
+
     def save_processed_wrist(self, patient_id: str, payload: Dict[str, Any]) -> None:
         """Saves processed wrist data to /patients/{id}/processed/wrist_latest."""
         db.reference(f"/patients/{patient_id}/processed/wrist_latest").set(payload)
@@ -86,6 +92,7 @@ class FirebaseClient:
         ts = int(time.time() * 1000)
         payload = {
             "timestamp": ts,
+            "patient_name": self.get_patient_name(patient_id),
             "verified_hr": ecg_result.verified_hr,
             "confidence": ecg_result.confidence,
             "quality": ecg_result.quality,
@@ -123,6 +130,7 @@ class FirebaseClient:
         ts = int(time.time() * 1000)
         payload = {
             "timestamp": ts,
+            "patient_name": self.get_patient_name(patient_id),
             "heartRate": wrist.heart_rate,  # camelCase — matches VitalsEntry in HistoryChart.ts
             "verified_hr": verified_hr,
             "spo2": wrist.spo2,
