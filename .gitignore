@@ -19,4 +19,4 @@ ui/dist/
 # OS/editor junk
 .DS_Store
 .vscode/
-*.log
+*.logfirebase_key.json
