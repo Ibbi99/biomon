@@ -1,14 +1,14 @@
-// src/app/EventBus.ts
-//
-// A simple typed publish/subscribe event bus.
-// Used to decouple Firebase data reception from UI rendering.
-//
-// Data flow:
-//   FirebaseService (subscribe) → emits "dashboard:update"
-//   DashboardController (bind)  → listens for "dashboard:update" → renders UI
-//
-// This means VirtualPatient.ts and RealPatient.ts don't need to know
-// anything about the UI components — they just emit events.
+/**
+ * A simple typed publish/subscribe event bus.
+ * Used to decouple Firebase data reception from UI rendering.
+ *
+ * Data flow:
+ *   FirebaseService (subscribe) → emits "dashboard:update"
+ *   DashboardController (bind)  → listens for "dashboard:update" → renders UI
+ *
+ * This means VirtualPatient.ts and RealPatient.ts don't need to know anything about the UI components — they just emit events.
+ * @author Cristina Vedinas
+ */
 
 type Listener<T> = (payload: T) => void;
 

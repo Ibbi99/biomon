@@ -1,8 +1,10 @@
-# simulators/scenarios.py
-#
+import random
+import time
+
 # Defines clinical scenarios for Patient_01 (virtual patient).
 # Each scenario returns a dict with heart_rate, spo2, and temp values
 # that simulate a specific medical condition.
+# @author Cristina Vedinas
 #
 # Used by patient_simulator.py, which cycles through scenarios every 15 seconds.
 #
@@ -12,9 +14,6 @@
 #   hypoxia        — low oxygen saturation (SpO2 82-89) -> WARNING / CRITICAL
 #   fever          — elevated temperature (Temp 38.1-39.5) -> WARNING / CRITICAL
 #   cardiac_arrest — HR=0, critically low SpO2          -> CRITICAL
-
-import random
-import time
 
 
 class ScenarioFactory:

@@ -1,4 +1,7 @@
-// src/app/DashboardController.ts
+/**
+ * @author Cristina Vedinas
+ */
+
 import type { DashboardPayload } from "@core/models/DashboardPayload";
 import { EventBus } from "@app/EventBus";
 import { VitalCard } from "@ui/components/VitalCard";

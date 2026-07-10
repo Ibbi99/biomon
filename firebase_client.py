@@ -1,5 +1,12 @@
-# firebase_client.py
-#
+import os
+import time
+from typing import Any, Dict
+
+import firebase_admin
+from firebase_admin import credentials, db
+
+from config import DATABASE_URL, FIREBASE_KEY_PATH
+
 # Wrapper around the Firebase Admin SDK.
 # Handles initialization and provides read/write methods
 # for all Firebase paths used by the backend.
@@ -11,15 +18,7 @@
 #   /patients/{id}/dashboard/current            <- written by PatientService (full dashboard payload)
 #   /patients/{id}/history/ecg_processed/{ts}   <- written by PatientService (verified_hr per batch)
 #   /patients/{id}/history/vitals/{ts}          <- written by PatientService (HR/SpO2/Temp per cycle)
-
-import os
-import time
-from typing import Any, Dict
-
-import firebase_admin
-from firebase_admin import credentials, db
-
-from config import DATABASE_URL, FIREBASE_KEY_PATH
+# @author Cristina Vedinas
 
 
 class FirebaseClient:

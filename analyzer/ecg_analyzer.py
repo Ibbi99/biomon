@@ -1,19 +1,3 @@
-# analyzer/ecg_analyzer.py
-#
-# Analyzes a raw ECG batch and extracts clinically meaningful information.
-#
-# Processing pipeline (applied in analyze()):
-#   1. Normalize        — zero-mean, unit-variance (z-score normalization)
-#   2. MedianFilter     — remove impulse noise / spikes
-#   3. BaselineRemoval  — remove slow drift (breathing, electrode movement)
-#   4. MovingAverage    — smooth high-frequency noise
-#   5. Enhance QRS      — differentiate + square + integrate to amplify R-peaks
-#   6. Detect R-peaks   — threshold-based peak detection with refractory period
-#   7. Calculate HR     — from average RR interval (60 / avg_RR)
-#   8. Calculate confidence — weighted score based on RR consistency, duration, completeness
-#
-# Output: ECGAnalysisResult with filtered signal, peaks, verified HR, and quality metrics.
-
 from typing import List
 
 from config import (
@@ -27,6 +11,21 @@ from config import (
 )
 from models import ChestData, ECGAnalysisResult
 from analyzer.filters import BaselineRemovalFilter, MovingAverageFilter, MedianFilter
+
+# Analyzes a raw ECG batch and extracts clinically meaningful information.
+# @author Cristina Vedinas
+#
+# Processing pipeline (applied in analyze()):
+#   1. Normalize        — zero-mean, unit-variance (z-score normalization)
+#   2. MedianFilter     — remove impulse noise / spikes
+#   3. BaselineRemoval  — remove slow drift (breathing, electrode movement)
+#   4. MovingAverage    — smooth high-frequency noise
+#   5. Enhance QRS      — differentiate + square + integrate to amplify R-peaks
+#   6. Detect R-peaks   — threshold-based peak detection with refractory period
+#   7. Calculate HR     — from average RR interval (60 / avg_RR)
+#   8. Calculate confidence — weighted score based on RR consistency, duration, completeness
+#
+# Output: ECGAnalysisResult with filtered signal, peaks, verified HR, and quality metrics.
 
 
 class ECGAnalyzer:

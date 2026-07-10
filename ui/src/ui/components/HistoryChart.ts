@@ -1,7 +1,8 @@
-// src/ui/components/HistoryChart.ts
-//
-// Patient history timeline with side-by-side detail panel.
-// Fully theme-aware — uses CSS variables from style.css for light/dark mode.
+/**
+ * Patient history timeline with side-by-side detail panel.
+ * Fully theme-aware — uses CSS variables from style.css for light/dark mode.
+ * @author Cristina Vedinas
+ */
 
 interface VitalsEntry {
   timestamp: number;

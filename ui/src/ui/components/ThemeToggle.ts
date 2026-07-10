@@ -1,18 +1,9 @@
-// src/ui/components/ThemeToggle.ts
-//
-// Sets up the light/dark theme toggle button.
-// Persists the selected theme in localStorage so it survives page reloads.
-//
-// Usage:
-//   import { setupThemeToggle } from "@ui/components/ThemeToggle";
-//   setupThemeToggle(); // call once at page load
-
 /**
- * Initializes the theme toggle button.
- * - Reads the saved theme from localStorage (defaults to "dark")
- * - Applies it immediately to <html data-theme="...">
- * - Listens for button clicks to switch between dark and light
+ * Sets up the light/dark theme toggle button.
+ * Persists the selected theme in localStorage so it survives page reloads.
+ * @author Cristina Vedinas
  */
+
 export function setupThemeToggle() {
   const themeToggle = document.getElementById("theme-toggle");
   if (!themeToggle) return;

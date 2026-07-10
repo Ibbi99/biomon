@@ -1,11 +1,3 @@
-# scripts/reset_database.py
-#
-# Utility script to completely wipe the Firebase Realtime Database.
-# USE WITH CAUTION — this deletes all patient data, history, and processed results.
-#
-# Run from the project root:
-#   python scripts/reset_database.py
-
 import os
 import sys
 
@@ -13,6 +5,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from firebase_client import FirebaseClient
 from firebase_admin import db
+
+# Utility script to completely wipe the Firebase Realtime Database.
+# USE WITH CAUTION — this deletes all patient data, history, and processed results.4
+# @author Cristina Vedinas
+#
+# Run from the project root:
+#   python scripts/reset_database.py
 
 
 def main():

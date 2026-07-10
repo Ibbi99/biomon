@@ -1,15 +1,12 @@
-// src/core/models/DashboardPayload.ts
-//
-// Defines the shape of the data written by the Python processor to Firebase
-// at: /patients/{patientId}/dashboard/current
-//
-// This interface is shared by all patient pages (VirtualPatient, RealPatient)
-// and by the overview page (App.ts / PatientCard).
-//
-// Fields populated by Python services:
-//   - alert_service.py  → status, message
-//   - dashboard_service.py → all fields below
-//   - ecg_analyzer.py   → ecg_filtered, ecg_peaks, confidence, quality, sampling_rate
+/**
+ * Defines the shape of the data written by the Python processor to Firebase at: /patients/{patientId}/dashboard/current
+ * This interface is shared by all patient pages (VirtualPatient, RealPatient) and by the overview page (App.ts / PatientCard).
+ * Fields populated by Python services:
+ *  - alert_service.py  → status, message
+ *  - dashboard_service.py → all fields below
+ *  - ecg_analyzer.py   → ecg_filtered, ecg_peaks, confidence, quality, sampling_rate
+ * @author Cristina Vedinas
+ */
 
 export interface DashboardPayload {
   // Alert status determined by alert_service.py based on vital thresholds

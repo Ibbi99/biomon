@@ -1,15 +1,3 @@
-// src/core/services/FirebaseService.ts
-//
-// Wraps the Firebase Realtime Database SDK.
-// Provides a single subscribe() method used by all patient pages
-// to listen for live data updates from the Python processor.
-//
-// The Python processor writes processed data to:
-//   /patients/{patientId}/dashboard/current
-//
-// FirebaseService reads from any path passed in — the caller is
-// responsible for providing the correct path.
-
 import { initializeApp, FirebaseApp } from "firebase/app";
 import {
   Database,
@@ -23,6 +11,14 @@ import {
   endAt,
   set,
 } from "firebase/database";
+
+/**
+ * Wraps the Firebase Realtime Database SDK.
+ * Provides a single subscribe() method used by all patient pages to listen for live data updates from the Python processor.
+ * The Python processor writes processed data to:  /patients/{patientId}/dashboard/current
+ * FirebaseService reads from any path passed in — the caller is responsible for providing the correct path.
+ * @author Cristina Vedinas
+ */
 
 export class FirebaseService {
   private app: FirebaseApp;

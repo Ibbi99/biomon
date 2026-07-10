@@ -1,7 +1,8 @@
-# services/dashboard_service.py
-#
+from models import DashboardStatus, ECGAnalysisResult, WristData
+
 # Assembles the final dashboard payload dict that gets written to Firebase
 # at /patients/{id}/dashboard/current.
+# @author Cristina Vedinas
 #
 # This payload is read directly by the TypeScript frontend (FirebaseService.ts)
 # and mapped to the DashboardPayload interface (DashboardPayload.ts).
@@ -17,8 +18,6 @@
 #   "good" / "fair" / "poor"  — ECG present and analyzed
 #   "wrist_only"               — no ECG sensor, HR from MAX30100 only
 #   "invalid"                  — no data at all
-
-from models import DashboardStatus, ECGAnalysisResult, WristData
 
 
 class DashboardService:

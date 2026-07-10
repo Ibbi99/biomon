@@ -2,6 +2,7 @@
   "name": "medical-dashboard-ui",
   "private": true,
   "version": "1.0.0",
+  "author": "Cristina Vedinas",
   "type": "module",
   "scripts": {
     "dev": "vite",

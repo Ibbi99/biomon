@@ -1,22 +1,18 @@
-// src/app/App.ts
-//
-// Entry point for the main overview page (index.html).
-// Displays a summary card for each patient and subscribes to their
-// live dashboard data to keep the cards up to date.
-//
-// Clicking a patient card navigates to their detail page
-// (patient_virtual.html or patient_real.html).
-//
-// Patients:
-//   Patient_01 — virtual (simulated by Python patient_simulator.py)
-//   Patient_02 — real    (ESP32 physical device)
-
 import { PatientCard } from "@ui/components/PatientCard";
 import { FirebaseService } from "@core/services/FirebaseService";
 import { setupThemeToggle } from "@ui/components/ThemeToggle";
 import type { DashboardPayload } from "@core/models/DashboardPayload";
 
-// Initialize theme toggle (reads saved preference from localStorage)
+/**
+ * Entry point for the main overview page (index.html).
+ * Displays a summary card for each patient and subscribes to their live dashboard data to keep the cards up to date.
+ * Clicking a patient card navigates to their detail page (patient_virtual.html or patient_real.html).
+ * Patients:
+ *   Patient_01 — virtual (simulated by Python patient_simulator.py)
+ *   Patient_02 — real    (ESP32 physical device)
+ * @author Cristina Vedinas
+ */
+
 setupThemeToggle();
 
 const container = document.getElementById("patients-container");

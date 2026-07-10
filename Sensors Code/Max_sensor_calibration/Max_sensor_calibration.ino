@@ -1,8 +1,9 @@
-// ============================================================
-//  MAX30100 LED Current Calibration
-//  Tests 8 current levels, 15s each
-//  Prints summary table at the end
-// ============================================================
+/**
+ * MAX30100 LED Current Calibration
+ * Tests 8 current levels, 15s each
+ * Prints summary table at the end
+ * @author Cristina Vedinas
+ */
 
 #include <Wire.h>
 #include "MAX30100_PulseOximeter.h"

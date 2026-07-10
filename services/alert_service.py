@@ -1,16 +1,3 @@
-# services/alert_service.py
-#
-# Evaluates patient vitals against clinical thresholds and returns
-# an alert status (STABLE / WARNING / CRITICAL) with a descriptive message.
-#
-# Priority order (highest severity checked first):
-#   CRITICAL: SpO2 < 88%, HR < 35 or > 160, Temp >= 39°C
-#   WARNING:  SpO2 < 92%, HR < 50 or > 120, Temp >= 38°C
-#   STABLE:   all values within normal range, or no data available
-#
-# For heart rate, the ECG-verified HR is preferred over the wrist sensor HR
-# when available, as it is more reliable.
-
 from config import (
     ALERT_HR_HIGH,
     ALERT_HR_LOW,
@@ -20,6 +7,18 @@ from config import (
     ALERT_TEMP_HIGH,
 )
 from models import DashboardStatus, ECGAnalysisResult, WristData
+
+# Evaluates patient vitals against clinical thresholds and returns
+# an alert status (STABLE / WARNING / CRITICAL) with a descriptive message.
+# @author Cristina Vedinas
+#
+# Priority order (highest severity checked first):
+#   CRITICAL: SpO2 < 88%, HR < 35 or > 160, Temp >= 39°C
+#   WARNING:  SpO2 < 92%, HR < 50 or > 120, Temp >= 38°C
+#   STABLE:   all values within normal range, or no data available
+#
+# For heart rate, the ECG-verified HR is preferred over the wrist sensor HR
+# when available, as it is more reliable.
 
 
 class AlertService:

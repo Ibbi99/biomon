@@ -1,23 +1,25 @@
-// src/ui/components/ECGCanvas.ts
-//
-// Real-time scrolling ECG monitor using PixiJS (WebGL).
-//
-// Key fix: labelContainer is built ONCE in initialize() and never cleared.
-// Only the signal graphics are cleared and redrawn on each frame.
-// This prevents PIXI Text blur caused by recreating text objects at 60fps.
-//
-// Y scale: fixed -2 to +2 (matches Python z-score normalization).
-// Signal clamped to ±2.5 so it never exits the grid.
-//
-// Features:
-//   - Fixed Y labels (+2, +1, 0, -1, -2) aligned with grid lines
-//   - Fixed X labels (0s to 4s)
-//   - R-peak markers (yellow dots)
-//   - Mouse hover: crosshair + tooltip
-//   - Pause/Resume button
-//   - Flatline mode (red line + FLATLINE text) for cardiac arrest
-
 import * as PIXI from "pixi.js";
+
+/**
+ * Real-time scrolling ECG monitor using PixiJS (WebGL).
+ * LabelContainer is built ONCE in initialize() and never cleared.
+ * Only the signal graphics are cleared and redrawn on each frame.
+ * This prevents PIXI Text blur caused by recreating text objects at 60fps.
+ * @author Cristina Vedinas
+ */
+
+/**
+ * Y scale: fixed -2 to +2 (matches Python z-score normalization).
+ * Signal clamped to ±2.5 so it never exits the grid.
+ *
+ * Features:
+ *   - Fixed Y labels (+2, +1, 0, -1, -2) aligned with grid lines
+ *   - Fixed X labels (0s to 4s)
+ *   - R-peak markers (yellow dots)
+ *   - Mouse hover: crosshair + tooltip
+ *   - Pause/Resume button
+ *   - Flatline mode (red line + FLATLINE text) for cardiac arrest
+ */
 
 export class ECGCanvas {
   private app!: PIXI.Application;

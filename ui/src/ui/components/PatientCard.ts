@@ -1,10 +1,8 @@
-// src/ui/components/PatientCard.ts
-//
-// Renders a summary card for a single patient on the main overview page (index.html).
-// Each card shows the patient name, current status, and basic vitals.
-// Clicking the card navigates to the patient's detailed dashboard page.
-//
-// Used only in App.ts (the overview page) — NOT in patient_virtual.html or patient_real.html.
+/**
+ * Renders a summary card for a single patient on the main overview page
+ * Each card shows the patient name, current status, and basic vitals.
+ * @author Cristina Vedinas
+ */
 
 export interface PatientCardProps {
   id: string;

@@ -1,10 +1,10 @@
-# config.py
-#
+import os
+
 # Central configuration file for the entire Python backend.
 # All thresholds, paths, and tuning parameters are defined here
 # so they can be changed in one place without touching the logic files.
+# @author Cristina Vedinas
 
-import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 

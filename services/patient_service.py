@@ -1,5 +1,3 @@
-# services/patient_service.py
-
 import math
 
 from analyzer.wrist_analyzer import WristAnalyzer
@@ -8,6 +6,8 @@ from services.alert_service import AlertService
 from services.dashboard_service import DashboardService
 from config import DEFAULT_ECG_SAMPLING_RATE, SIMULATED_PATIENT_IDS
 from models import ChestData, PatientState
+
+# @author Cristina Vedinas
 
 
 class PatientService:

@@ -1,14 +1,13 @@
-# analyzer/filters.py
-#
+from typing import List
+
 # Signal processing filters used by ECGAnalyzer to clean the raw ECG signal
 # before R-peak detection.
+# @author Cristina Vedinas
 #
 # Applied in this order inside ECGAnalyzer.analyze():
 #   1. MedianFilter        — removes short spikes and impulse noise
 #   2. BaselineRemovalFilter — removes slow drift (breathing artifacts, electrode movement)
 #   3. MovingAverageFilter — smooths high-frequency noise
-
-from typing import List
 
 
 class MovingAverageFilter:

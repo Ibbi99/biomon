@@ -1,5 +1,9 @@
-# app.py
-#
+import time
+
+from config import POLL_INTERVAL_SECONDS
+from firebase_client import FirebaseClient
+from services.patient_service import PatientService
+
 # Main entry point for the Python processing server.
 # Runs a continuous poll loop that reads raw sensor data from Firebase,
 # processes it through the analysis pipeline, and writes results back to Firebase.
@@ -18,12 +22,8 @@
 #   ESP32 timestamps may be Unix ms (NTP synced) or relative millis() values.
 #   Relative timestamps (before year 2020) are skipped — they cannot be compared
 #   to wall clock time and would always appear stale.
+# @author Cristina Vedinas
 
-import time
-
-from config import POLL_INTERVAL_SECONDS
-from firebase_client import FirebaseClient
-from services.patient_service import PatientService
 
 # ECG data older than this is discarded (electrode disconnected / device offline)
 ECG_STALE_THRESHOLD_MS = 10_000

@@ -1,12 +1,8 @@
-// src/ui/components/VitalCard.ts
-//
-// Manages a single vital sign card in the patient dashboard (HR, SpO2, Temp, AI HR).
-// Each card has a value display element and an optional wrapper for danger styling.
-//
-// Usage:
-//   const hrCard = new VitalCard("hr");   // looks for <div id="val-hr">
-//   hrCard.setValue(72, 0);               // displays "72"
-//   hrCard.setDanger(true);              // adds "danger" CSS class (red highlight)
+/**
+ * Manages a single vital sign card in the patient dashboard (HR, SpO2, Temp, AI HR).
+ * Each card has a value display element and an optional wrapper for danger styling.
+ * @author Cristina Vedinas
+ */
 
 export class VitalCard {
   private readonly valueElement: HTMLElement;

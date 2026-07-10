@@ -1,17 +1,16 @@
-// src/app/RealPatient.ts
-//
-// Entry point for the real patient detail page (patient_real.html).
-// Connects Firebase to the DashboardController via EventBus.
-//
-// Data source: ESP32 sensors → Firebase → Python app.py processor
-//   → /patients/Patient_02/dashboard/current → this page
-
 import { EventBus } from "@app/EventBus";
 import { DashboardController } from "@app/DashboardController";
 import { FirebaseService } from "@core/services/FirebaseService";
 import { HistoryChart } from "@ui/components/HistoryChart";
 import { setupThemeToggle } from "@ui/components/ThemeToggle";
 import type { DashboardPayload } from "@core/models/DashboardPayload";
+
+/**
+ * Entry point for the real patient detail page (patient_real.html).
+ * Connects Firebase to the DashboardController via EventBus.
+ * Data source: ESP32 sensors → Firebase → Python app.py processor
+ * @author Cristina Vedinas
+ */
 
 setupThemeToggle();
 

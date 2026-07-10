@@ -1,7 +1,18 @@
-# simulators/patient_simulator.py
-#
+import math
+import os
+import random
+import sys
+import time
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from firebase_client import FirebaseClient
+from simulators.scenarios import ScenarioFactory
+from firebase_admin import db
+
 # Simulates Patient_01 by generating realistic vital signs and ECG data
 # and pushing them to Firebase every second.
+# @author Cristina Vedinas
 #
 # The Python processor (app.py) then reads this data and processes it
 # exactly like it would for a real ESP32 patient.
@@ -14,17 +25,6 @@
 #   /patients/Patient_01/live/ecg       <- ECG batch (200 samples at 200 Hz)
 #   /patients/Patient_01/history/vitals <- append-only history
 
-import math
-import os
-import random
-import sys
-import time
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from firebase_client import FirebaseClient
-from simulators.scenarios import ScenarioFactory
-from firebase_admin import db
 
 ECG_BATCH_SIZE = 400  # Samples per batch (matches ESP32 firmware)
 ECG_SAMPLING_RATE = 200  # Hz (matches ESP32 firmware)

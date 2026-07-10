@@ -1,9 +1,11 @@
-# analyzer/wrist_analyzer.py
-#
+import time
+from models import WristData
+
 # Sanitizes raw wrist sensor data from Firebase before it enters the pipeline.
 # Handles both camelCase (ESP32 / simulator) and snake_case field names.
 # Validates values against physiologically plausible ranges — out-of-range
 # values are set to None rather than passed downstream as bad data.
+# @author Cristina Vedinas
 #
 # Valid ranges:
 #   HR:   20 – 200 BPM  (MAX30100 returns 255 when no finger — reject it)
@@ -23,8 +25,6 @@
 #   staleness check is skipped to avoid false rejections.
 #   Otherwise, data older than STALE_THRESHOLD_MS (15 seconds) is rejected.
 
-import time
-from models import WristData
 
 STALE_THRESHOLD_MS = 15_000
 

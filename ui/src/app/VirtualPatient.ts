@@ -1,17 +1,16 @@
-// src/app/VirtualPatient.ts
-//
-// Entry point for the virtual patient detail page (patient_virtual.html).
-// Connects Firebase to the DashboardController via EventBus.
-//
-// Data source: Python patient_simulator.py → Firebase → Python app.py processor
-//   → /patients/Patient_01/dashboard/current → this page
-
 import { EventBus } from "@app/EventBus";
 import { DashboardController } from "@app/DashboardController";
 import { setupThemeToggle } from "@ui/components/ThemeToggle";
 import { FirebaseService } from "@core/services/FirebaseService";
 import { HistoryChart } from "@ui/components/HistoryChart";
 import type { DashboardPayload } from "@core/models/DashboardPayload";
+
+/**
+ * Entry point for the virtual patient detail page (patient_virtual.html).
+ * Connects Firebase to the DashboardController via EventBus.
+ * Data source: Python patient_simulator.py → Firebase → Python app.py processor
+ * @author Cristina Vedinas
+ */
 
 setupThemeToggle();
 

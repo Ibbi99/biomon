@@ -1,9 +1,18 @@
-# scripts/validate_physionet.py
-#
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import wfdb
+import wfdb.processing
+from analyzer.ecg_analyzer import ECGAnalyzer
+from models import ChestData
+
 # Validates ecg_analyzer.py against PhysioNet MIT-BIH Arrhythmia Database.
 #
 # Downloads a real ECG record, runs it through our analyzer,
 # and compares detected R-peaks against the clinical annotations.
+# @author Cristina Vedinas
 #
 # Usage:
 #   python scripts/validate_physionet.py
@@ -20,15 +29,6 @@
 #   Precision  (PPV) = TP / (TP + FP)  — how many of our peaks are real
 #   F1 score         = 2 * Se * PPV / (Se + PPV)
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import wfdb
-import wfdb.processing
-from analyzer.ecg_analyzer import ECGAnalyzer
-from models import ChestData
 
 # ── Configuration ─────────────────────────────────────────────
 RECORD_NAME = "105"  # MIT-BIH record to test

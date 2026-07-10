@@ -1,12 +1,8 @@
-// src/ui/components/StatusBanner.ts
-//
-// Manages the footer status bar shown at the bottom of each patient page.
-// Displays the clinical alert message (e.g. "Critical oxygen saturation")
-// and the timestamp of the last data update.
-//
-// Expects these elements in the HTML:
-//   <div id="clinical-message">...</div>
-//   <div id="last-update">...</div>
+/**
+ * Manages the footer status bar shown at the bottom of each patient page.
+ * Displays the clinical alert message (e.g. "Critical oxygen saturation") and the timestamp of the last data update.
+ * @author Cristina Vedinas
+ */
 
 export class StatusBanner {
   private readonly messageElement: HTMLElement;

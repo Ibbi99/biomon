@@ -1,17 +1,21 @@
-// ============================================================
-//  ESP32 – AD8232 ECG  →  Firebase Realtime Database
-//  Patient: Patient_02
-//
-//  Hardware:
-//    - AD8232 ECG sensor: OUTPUT=GPIO33, LO-=GPIO25, LO+=GPIO26
-//
-//  Firebase paths:
-//    - /patients/Patient_02/live/ecg          ← current batch (read by Python)
-//
-//  Sampling: 200Hz, 200 samples per batch (1s of data)
-//  Timestamp: Unix ms via NTP (required for Python stale detection)
-//  History: written exclusively by Python backend (server-side timestamps)
-// ============================================================
+/**
+ *  ESP32 – AD8232 ECG  →  Firebase Realtime Database
+ *  Patient: Patient_02
+ *
+ *  Hardware:
+ *    - AD8232 ECG sensor: OUTPUT=GPIO33, LO-=GPIO25, LO+=GPIO26
+ *
+ *  Firebase paths:
+ *    - /patients/Patient_02/live/ecg          ← current batch (read by Python)
+ *
+ *  Sampling: 200Hz, 200 samples per batch (1s of data)
+ *  Timestamp: Unix ms via NTP (required for Python stale detection)
+ *  History: written exclusively by Python backend (server-side timestamps)
+ *  @author Cristina Vedinas
+ */
+```
+
+
 
 #include <WiFi.h>
 #include <HTTPClient.h>

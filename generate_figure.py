@@ -2,6 +2,8 @@ import json
 import matplotlib.pyplot as plt
 import numpy as np
 
+# @author Cristina Vedinas
+
 with open("ecg_sample.json") as f:
     data = json.load(f)
 

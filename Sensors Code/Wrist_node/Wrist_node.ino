@@ -1,17 +1,18 @@
-// ============================================================
-//  ESP32 – MAX30100 (7.6mA) + HTU21D → Firebase
-//  Patient: Patient_02
-//
-//  Hardware:
-//    - MAX30100 (SpO2/HR): I2C bus 0 — SDA=GPIO27, SCL=GPIO32
-//    - HTU21D (Temperature): I2C bus 1 — SDA=GPIO25, SCL=GPIO26
-//    - GPIO12 tied to GND (strapping pin)
+/**
+ *  ESP32 – MAX30100 (7.6mA) + HTU21D → Firebase
+ *   Patient: Patient_02
+ * 
+ *  Hardware:
+ *     - MAX30100 (SpO2/HR): I2C bus 0 — SDA=GPIO27, SCL=GPIO32
+ *     - HTU21D (Temperature): I2C bus 1 — SDA=GPIO25, SCL=GPIO26
+ *     - GPIO12 tied to GND (strapping pin)
 
-// Architecture:
-//    - Core 1 (loop): MAX30100 updates + HTU21D reads every 4s
-//    - Core 0 (task): Firebase writes every 3s
-//    - Mutex protects shared temperature variable between cores
-// ============================================================
+ *  Architecture:
+ *     - Core 1 (loop): MAX30100 updates + HTU21D reads every 4s
+ *     - Core 0 (task): Firebase writes every 3s
+ *    - Mutex protects shared temperature variable between cores
+ * @author Cristina Vedinas
+ */
 
 #include <Wire.h>
 #include <WiFi.h>
