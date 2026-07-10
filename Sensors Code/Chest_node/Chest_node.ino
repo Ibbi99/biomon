@@ -22,8 +22,8 @@
 #include <time.h>
 
 // ── WiFi ─────────────────────────────────────────────────────
-const char* WIFI_SSID     = "iPhone-Cristina";
-const char* WIFI_PASSWORD = "12345678";
+const char* WIFI_SSID     = "Name";
+const char* WIFI_PASSWORD = "Password";
 
 // ── Firebase ─────────────────────────────────────────────────
 const char* FB_HOST = "https://bachelordegree-6ed5c-default-rtdb.europe-west1.firebasedatabase.app";
