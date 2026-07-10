@@ -1,1 +1,4 @@
-firebase-admin
+firebase_admin==7.2.0
+matplotlib==3.11.0
+numpy==2.5.1
+wfdb==4.3.1
